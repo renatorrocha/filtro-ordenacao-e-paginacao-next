@@ -91,3 +91,13 @@ Neste mini projeto não será preciso implementar nenhum design - já fizemos is
 - React
 - Next.js básico
 - Entender as diferenças entre server e client components é recomendável
+
+## TODO
+- [ ] Busca Textual
+  - Deve ser server-side (pela API)
+  - Deve ser refletida na URL
+- [ ] Filtro de Status
+  - Server-side
+  - Deve ser refletido na URL
+- [ ] Ordenação de Campos
+- [ ] Paginação
