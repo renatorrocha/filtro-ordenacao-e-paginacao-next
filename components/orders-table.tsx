@@ -8,18 +8,12 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "./ui/badge";
 import { ChevronsUpDown } from "lucide-react";
-import { Order, OrderStatus } from "@/app/_types/order";
+import { OrderStatus } from "@/types/order";
 import { formatCurrencyBRL } from "@/lib/utils";
-
-interface Orders {
-  data: Order[];
-}
+import { getOrders } from "@/server/actions";
 
 export default async function OrdersTable() {
-  const res = await fetch("https://apis.codante.io/api/orders-api/orders");
-  const orders: Orders = await res.json();
-
-  console.log(orders.data);
+  const orders = await getOrders();
 
   return (
     <Table>
