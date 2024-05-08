@@ -14,7 +14,7 @@ import { Order, OrderStatus } from "@/types/order";
 import { formatCurrencyBRL } from "@/lib/utils";
 import { getOrders } from "@/server/actions";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 export default function OrdersTable() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -53,30 +53,32 @@ export default function OrdersTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {orders?.map((order) => (
-          <TableRow key={order.id}>
-            <TableCell>
-              <div className="font-medium">{order.customer_name}</div>
-              <div className="hidden md:inline text-sm text-muted-foreground">
-                {order.customer_email}
-              </div>
-            </TableCell>
+        <Suspense>
+          {orders?.map((order) => (
+            <TableRow key={order.id}>
+              <TableCell>
+                <div className="font-medium">{order.customer_name}</div>
+                <div className="hidden md:inline text-sm text-muted-foreground">
+                  {order.customer_email}
+                </div>
+              </TableCell>
 
-            <TableCell>
-              <Badge className={`text-xs`} variant="outline">
-                {OrderStatus[order.status]}
-              </Badge>
-            </TableCell>
+              <TableCell>
+                <Badge className={`text-xs`} variant="outline">
+                  {OrderStatus[order.status]}
+                </Badge>
+              </TableCell>
 
-            <TableCell className="hidden md:table-cell">
-              {order.order_date}
-            </TableCell>
+              <TableCell className="hidden md:table-cell">
+                {order.order_date}
+              </TableCell>
 
-            <TableCell className="text-right">
-              {formatCurrencyBRL(order.amount_in_cents)}
-            </TableCell>
-          </TableRow>
-        ))}
+              <TableCell className="text-right">
+                {formatCurrencyBRL(order.amount_in_cents)}
+              </TableCell>
+            </TableRow>
+          ))}
+        </Suspense>
       </TableBody>
     </Table>
   );
