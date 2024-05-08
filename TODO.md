@@ -29,4 +29,4 @@
   - Deve ser refletido na URL
 
 ### Desafio
-- Utilizar o hook `UseDebounce` para atrasar a execução de busca textual
+- [X] Utilizar o hook `UseDebounce` para atrasar a execução de busca textual
