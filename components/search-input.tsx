@@ -13,7 +13,7 @@ export default function SearchInput() {
     searchParams.get("search") || ""
   );
 
-  function handleSearch(term: string) {
+  function handleSearchByName(term: string) {
     const params = new URLSearchParams(searchParams);
 
     if (term) {
@@ -28,7 +28,7 @@ export default function SearchInput() {
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   useEffect(() => {
-    handleSearch(debouncedSearchTerm);
+    handleSearchByName(debouncedSearchTerm);
   }, [debouncedSearchTerm]);
 
   return (

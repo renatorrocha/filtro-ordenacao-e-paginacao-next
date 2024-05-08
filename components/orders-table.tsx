@@ -19,12 +19,17 @@ import { useEffect, useState } from "react";
 export default function OrdersTable() {
   const [orders, setOrders] = useState<Order[]>([]);
   const searchParams = useSearchParams();
-  const search = searchParams.get("search");
+
+  const searchParamsName = searchParams.get("search");
+  const searchParamsStatus = searchParams.get("status");
 
   useEffect(() => {
     async function HandleGetOrders() {
       try {
-        const fetchedOrders = await getOrders(search);
+        const fetchedOrders = await getOrders({
+          searchParamsName,
+          searchParamsStatus,
+        });
         setOrders(fetchedOrders.data);
       } catch (error) {
         console.error(error);
@@ -32,7 +37,7 @@ export default function OrdersTable() {
     }
 
     HandleGetOrders();
-  }, [search]);
+  }, [searchParamsName, searchParamsStatus]);
 
   return (
     <Table>

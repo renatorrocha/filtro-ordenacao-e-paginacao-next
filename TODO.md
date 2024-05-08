@@ -13,7 +13,7 @@
   - Deve ser server-side (pela API)
   - Deve ser refletida na URL
 
-- [ ] Filtro de Status
+- [X] Filtro de Status
   - Pelo botão de filtro (pending, completed)
   - Server-side
   - Deve ser refletido na URL

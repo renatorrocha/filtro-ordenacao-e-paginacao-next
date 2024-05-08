@@ -4,12 +4,27 @@ interface Orders {
   data: Order[];
 }
 
-export async function getOrders(search: string | null): Promise<Orders> {
+interface OrderQueryParams {
+  searchParamsName?: string | null | undefined;
+  searchParamsStatus?: string | null | undefined;
+}
+
+export async function getOrders(params: OrderQueryParams): Promise<Orders> {
   let url = "https://apis.codante.io/api/orders-api/orders";
 
-  if (search) {
-    const queryParams = new URLSearchParams({ search: search });
-    url += `?${queryParams}`;
+  const queryParams = new URLSearchParams();
+
+  if (params.searchParamsName) {
+    queryParams.append("search", params.searchParamsName);
+  }
+
+  if (params.searchParamsStatus) {
+    queryParams.append("status", params.searchParamsStatus);
+  }
+
+  const queryString = queryParams.toString();
+  if (queryString) {
+    url += `?${queryString}`;
   }
 
   const res = await fetch(url);

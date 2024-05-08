@@ -1,3 +1,4 @@
+"use client";
 
 import {
   DropdownMenu,
@@ -7,21 +8,42 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 
-import { Button } from '@/components/ui/button';
-import { Filter } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Filter } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 export default function FilterDropdown() {
+  const { replace } = useRouter();
+  const searchParams = useSearchParams();
+  const [status, setStatus] = useState(searchParams.get("status") || "all");
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+
+    if (status && status !== "all") {
+      params.set("status", status);
+    } else {
+      params.delete("status");
+    }
+
+    replace(`?${params.toString()}`);
+  }, [status]);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          size={'default'}
+          size={"default"}
           className="flex gap-2 text-slate-600"
         >
-          <Filter className="h-4 w-4" />
+          <Filter
+            className={cn("size-4", status != "all" ? "fill-green-400" : null)}
+          />
           Status
         </Button>
       </DropdownMenuTrigger>
@@ -29,8 +51,9 @@ export default function FilterDropdown() {
       <DropdownMenuContent className="w-16">
         <DropdownMenuLabel>Filtrar por:</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuRadioGroup value="">
-          <DropdownMenuRadioItem value="">Todos</DropdownMenuRadioItem>
+
+        <DropdownMenuRadioGroup value={status} onValueChange={setStatus}>
+          <DropdownMenuRadioItem value="all">Todos</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="pending">
             Pendente
           </DropdownMenuRadioItem>
