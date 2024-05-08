@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -8,12 +10,29 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "./ui/badge";
 import { ChevronsUpDown } from "lucide-react";
-import { OrderStatus } from "@/types/order";
+import { Order, OrderStatus } from "@/types/order";
 import { formatCurrencyBRL } from "@/lib/utils";
 import { getOrders } from "@/server/actions";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-export default async function OrdersTable() {
-  const orders = await getOrders();
+export default function OrdersTable() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search");
+
+  useEffect(() => {
+    async function HandleGetOrders() {
+      try {
+        const fetchedOrders = await getOrders(search);
+        setOrders(fetchedOrders.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    HandleGetOrders();
+  }, [search]);
 
   return (
     <Table>
@@ -34,7 +53,7 @@ export default async function OrdersTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {orders.data.map((order) => (
+        {orders?.map((order) => (
           <TableRow key={order.id}>
             <TableCell>
               <div className="font-medium">{order.customer_name}</div>

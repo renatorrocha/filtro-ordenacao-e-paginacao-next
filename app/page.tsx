@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default async function Component() {
+export default function Component() {
   return (
     <main className="container px-1 py-10 md:p-10">
       <Card>
