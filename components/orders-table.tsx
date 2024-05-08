@@ -14,9 +14,9 @@ import { Order, OrderStatus } from "@/types/order";
 import { formatCurrencyBRL } from "@/lib/utils";
 import { getOrders } from "@/server/actions";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-function Test() {
+export default function OrdersTable() {
   const [orders, setOrders] = useState<Order[]>([]);
   const searchParams = useSearchParams();
   const search = searchParams.get("search");
@@ -34,31 +34,6 @@ function Test() {
     HandleGetOrders();
   }, [search]);
 
-  return orders?.map((order) => (
-    <TableRow key={order.id}>
-      <TableCell>
-        <div className="font-medium">{order.customer_name}</div>
-        <div className="hidden md:inline text-sm text-muted-foreground">
-          {order.customer_email}
-        </div>
-      </TableCell>
-
-      <TableCell>
-        <Badge className={`text-xs`} variant="outline">
-          {OrderStatus[order.status]}
-        </Badge>
-      </TableCell>
-
-      <TableCell className="hidden md:table-cell">{order.order_date}</TableCell>
-
-      <TableCell className="text-right">
-        {formatCurrencyBRL(order.amount_in_cents)}
-      </TableCell>
-    </TableRow>
-  ));
-}
-
-export default function OrdersTable() {
   return (
     <Table>
       <TableHeader>
@@ -78,9 +53,30 @@ export default function OrdersTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        <Suspense>
-          <Test />
-        </Suspense>
+        {orders?.map((order) => (
+          <TableRow key={order.id}>
+            <TableCell>
+              <div className="font-medium">{order.customer_name}</div>
+              <div className="hidden md:inline text-sm text-muted-foreground">
+                {order.customer_email}
+              </div>
+            </TableCell>
+
+            <TableCell>
+              <Badge className={`text-xs`} variant="outline">
+                {OrderStatus[order.status]}
+              </Badge>
+            </TableCell>
+
+            <TableCell className="hidden md:table-cell">
+              {order.order_date}
+            </TableCell>
+
+            <TableCell className="text-right">
+              {formatCurrencyBRL(order.amount_in_cents)}
+            </TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );
