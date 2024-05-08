@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Suspense } from "react";
 
 export default function Component() {
   return (
@@ -30,8 +31,10 @@ export default function Component() {
         </CardHeader>
 
         <CardContent>
-          <OrdersTable />
-
+          <Suspense>
+            <OrdersTable />
+          </Suspense>
+          
           <div className="mt-8">
             <Pagination />
           </div>
