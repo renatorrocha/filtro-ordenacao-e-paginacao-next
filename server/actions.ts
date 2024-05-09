@@ -5,26 +5,31 @@ interface Orders {
 }
 
 interface OrderQueryParams {
+  searchParamsPage?: string | null | undefined;
   searchParamsName?: string | null | undefined;
   searchParamsStatus?: string | null | undefined;
   searchParamsHeadersSort?: string | null | undefined;
 }
 
-export async function getOrders(params: OrderQueryParams): Promise<Orders> {
+export async function getOrders(params?: OrderQueryParams): Promise<Orders> {
   let url = "https://apis.codante.io/api/orders-api/orders";
 
   const queryParams = new URLSearchParams();
 
-  if (params.searchParamsName) {
+  if (params?.searchParamsName) {
     queryParams.append("search", params.searchParamsName);
   }
 
-  if (params.searchParamsStatus) {
+  if (params?.searchParamsStatus) {
     queryParams.append("status", params.searchParamsStatus);
   }
 
-  if (params.searchParamsHeadersSort) {
+  if (params?.searchParamsHeadersSort) {
     queryParams.append("sort", params.searchParamsHeadersSort);
+  }
+
+  if (params?.searchParamsPage) {
+    queryParams.append("page", params.searchParamsPage);
   }
 
   const queryString = queryParams.toString();

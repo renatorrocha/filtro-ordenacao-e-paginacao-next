@@ -8,6 +8,12 @@ export type Order = {
 
   created_at: string;
   updated_at: string;
+
+  meta: {
+    current_page: number;
+    last_page: number;
+    total: number;
+  };
 };
 
 export enum OrderStatus {
