@@ -18,7 +18,7 @@
   - Server-side
   - Deve ser refletido na URL
 
-- [ ] Ordenação de Campos
+- [X] Ordenação de Campos
   - ordenação para os campos de *Data do pedido* e *Valor*
   - Deve ser acionada com um clique no nome da coluna
   - Trocar o ícone para corresponder a ordenação

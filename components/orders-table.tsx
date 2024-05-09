@@ -9,19 +9,21 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "./ui/badge";
-import { ChevronsUpDown } from "lucide-react";
+import { ChevronDown, ChevronUp, ChevronsUpDown } from "lucide-react";
 import { Order, OrderStatus } from "@/types/order";
 import { formatCurrencyBRL } from "@/lib/utils";
 import { getOrders } from "@/server/actions";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function OrdersTable() {
   const [orders, setOrders] = useState<Order[]>([]);
   const searchParams = useSearchParams();
+  const { replace } = useRouter();
 
   const searchParamsName = searchParams.get("search");
   const searchParamsStatus = searchParams.get("status");
+  let searchParamsSort = searchParams.get("sort");
 
   useEffect(() => {
     async function HandleGetOrders() {
@@ -29,6 +31,7 @@ export default function OrdersTable() {
         const fetchedOrders = await getOrders({
           searchParamsName,
           searchParamsStatus,
+          searchParamsSort,
         });
         setOrders(fetchedOrders.data);
       } catch (error) {
@@ -37,23 +40,85 @@ export default function OrdersTable() {
     }
 
     HandleGetOrders();
-  }, [searchParamsName, searchParamsStatus]);
+  }, [searchParamsName, searchParamsStatus, searchParamsSort]);
+
+  function handleSortByParam(sortField: string) {
+    const params = new URLSearchParams(searchParams);
+    const currentSort = params.get("sort");
+    let newSortDirection = "";
+
+    if (currentSort === sortField) {
+      newSortDirection = `-${sortField}`; // troca de asc para desc
+    } else if (currentSort === `-${sortField}`) {
+      newSortDirection = ""; //remove a ordenação
+    } else {
+      newSortDirection = sortField;
+      params.delete("sort"); //ordena para asc
+    }
+
+    if (newSortDirection) {
+      params.set("sort", newSortDirection);
+    } else {
+      params.delete("sort");
+    }
+
+    replace(`?${params.toString()}`);
+  }
+
+  function renderSortIcon(sortField: string) {
+    const currentSort = searchParams.get("sort");
+
+    if (currentSort === sortField) {
+      return <ChevronUp className="size-4" />;
+    } else if (currentSort === `-${sortField}`) {
+      return <ChevronDown className="size-4" />;
+    } else {
+      return <ChevronsUpDown className="size-4" />;
+    }
+  }
 
   return (
     <Table>
       <TableHeader>
         <TableRow className="w-full">
-          <TableHead className="table-cell">Cliente</TableHead>
-          <TableHead className="table-cell">Status</TableHead>
-          <TableHead className="table-cell cursor-pointer justify-end items-center gap-1">
+          <TableHead
+            className="table-cell cursor-pointer justify-end items-center gap-1"
+            onClick={() => handleSortByParam("customer_name")}
+          >
             <div className="flex items-center gap-1">
-              Data
-              <ChevronsUpDown className="w-4" />
+              Nome
+              {renderSortIcon("customer_name")}
             </div>
           </TableHead>
-          <TableHead className="text-right cursor-pointer flex justify-end items-center gap-1">
-            Valor
-            <ChevronsUpDown className="w-4" />
+
+          <TableHead
+            className="table-cell cursor-pointer justify-end items-center gap-1"
+            onClick={() => handleSortByParam("status")}
+          >
+            <div className="flex items-center gap-1">
+              Status
+              {renderSortIcon("status")}
+            </div>
+          </TableHead>
+
+          <TableHead
+            className="table-cell cursor-pointer justify-end items-center gap-1"
+            onClick={() => handleSortByParam("order_date")}
+          >
+            <div className="flex items-center gap-1">
+              Data
+              {renderSortIcon("order_date")}
+            </div>
+          </TableHead>
+
+          <TableHead
+            className="text-right cursor-pointer flex justify-end items-center gap-1"
+            onClick={() => handleSortByParam("amount_in_cents")}
+          >
+            <div className="flex items-center gap-1">
+              Valor
+              {renderSortIcon("amount_in_cents")}
+            </div>
           </TableHead>
         </TableRow>
       </TableHeader>
