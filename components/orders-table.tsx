@@ -25,6 +25,7 @@ export default function OrdersTable() {
   const searchParamsName = searchParams.get("search");
   const searchParamsStatus = searchParams.get("status");
   const searchParamsHeadersSort = searchParams.get("sort");
+  const searchParamsPage = searchParams.get("page");
 
   useEffect(() => {
     async function HandleGetOrders() {
@@ -33,6 +34,7 @@ export default function OrdersTable() {
           searchParamsName,
           searchParamsStatus,
           searchParamsHeadersSort,
+          searchParamsPage,
         });
         setOrders(fetchedOrders.data);
       } catch (error) {
@@ -42,7 +44,12 @@ export default function OrdersTable() {
     }
 
     HandleGetOrders();
-  }, [searchParamsName, searchParamsStatus, searchParamsHeadersSort]);
+  }, [
+    searchParamsName,
+    searchParamsStatus,
+    searchParamsHeadersSort,
+    searchParamsPage,
+  ]);
 
   function handleSortByHeaderTitle(sortField: string) {
     const params = new URLSearchParams(searchParams);
