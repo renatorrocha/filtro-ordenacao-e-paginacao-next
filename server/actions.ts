@@ -7,7 +7,7 @@ interface Orders {
 interface OrderQueryParams {
   searchParamsName?: string | null | undefined;
   searchParamsStatus?: string | null | undefined;
-  searchParamsSort?: string | null | undefined;
+  searchParamsHeadersSort?: string | null | undefined;
 }
 
 export async function getOrders(params: OrderQueryParams): Promise<Orders> {
@@ -23,8 +23,8 @@ export async function getOrders(params: OrderQueryParams): Promise<Orders> {
     queryParams.append("status", params.searchParamsStatus);
   }
 
-  if (params.searchParamsSort) {
-    queryParams.append("sort", params.searchParamsSort);
+  if (params.searchParamsHeadersSort) {
+    queryParams.append("sort", params.searchParamsHeadersSort);
   }
 
   const queryString = queryParams.toString();

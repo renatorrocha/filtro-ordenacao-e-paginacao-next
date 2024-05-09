@@ -15,6 +15,7 @@ import { formatCurrencyBRL } from "@/lib/utils";
 import { getOrders } from "@/server/actions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function OrdersTable() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -23,7 +24,7 @@ export default function OrdersTable() {
 
   const searchParamsName = searchParams.get("search");
   const searchParamsStatus = searchParams.get("status");
-  let searchParamsSort = searchParams.get("sort");
+  const searchParamsHeadersSort = searchParams.get("sort");
 
   useEffect(() => {
     async function HandleGetOrders() {
@@ -31,18 +32,19 @@ export default function OrdersTable() {
         const fetchedOrders = await getOrders({
           searchParamsName,
           searchParamsStatus,
-          searchParamsSort,
+          searchParamsHeadersSort,
         });
         setOrders(fetchedOrders.data);
       } catch (error) {
         console.error(error);
+        toast.error("Erro ao carregar dados, tente novamente mais tarde.");
       }
     }
 
     HandleGetOrders();
-  }, [searchParamsName, searchParamsStatus, searchParamsSort]);
+  }, [searchParamsName, searchParamsStatus, searchParamsHeadersSort]);
 
-  function handleSortByParam(sortField: string) {
+  function handleSortByHeaderTitle(sortField: string) {
     const params = new URLSearchParams(searchParams);
     const currentSort = params.get("sort");
     let newSortDirection = "";
@@ -83,7 +85,7 @@ export default function OrdersTable() {
         <TableRow className="w-full">
           <TableHead
             className="table-cell cursor-pointer justify-end items-center gap-1"
-            onClick={() => handleSortByParam("customer_name")}
+            onClick={() => handleSortByHeaderTitle("customer_name")}
           >
             <div className="flex items-center gap-1">
               Nome
@@ -93,7 +95,7 @@ export default function OrdersTable() {
 
           <TableHead
             className="table-cell cursor-pointer justify-end items-center gap-1"
-            onClick={() => handleSortByParam("status")}
+            onClick={() => handleSortByHeaderTitle("status")}
           >
             <div className="flex items-center gap-1">
               Status
@@ -103,7 +105,7 @@ export default function OrdersTable() {
 
           <TableHead
             className="table-cell cursor-pointer justify-end items-center gap-1"
-            onClick={() => handleSortByParam("order_date")}
+            onClick={() => handleSortByHeaderTitle("order_date")}
           >
             <div className="flex items-center gap-1">
               Data
@@ -113,7 +115,7 @@ export default function OrdersTable() {
 
           <TableHead
             className="text-right cursor-pointer flex justify-end items-center gap-1"
-            onClick={() => handleSortByParam("amount_in_cents")}
+            onClick={() => handleSortByHeaderTitle("amount_in_cents")}
           >
             <div className="flex items-center gap-1">
               Valor
