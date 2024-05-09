@@ -25,7 +25,7 @@
   - Deve ser refletido na URL
 
 - [ ] Paginação
-  - ative e desative os botoes quando nao á mais paginas
+  - ative e desative os botoes quando não á mais paginas
   - Deve ser refletido na URL
 
 ### Desafio
