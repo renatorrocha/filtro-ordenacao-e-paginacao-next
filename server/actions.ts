@@ -1,8 +1,4 @@
-import { Order } from "../types/order";
-
-interface Orders {
-  data: Order[];
-}
+import { PromisedOrders } from "@/types/order";
 
 interface OrderQueryParams {
   searchParamsPage?: string | null | undefined;
@@ -11,7 +7,9 @@ interface OrderQueryParams {
   searchParamsHeadersSort?: string | null | undefined;
 }
 
-export async function getOrders(params?: OrderQueryParams): Promise<Orders> {
+export async function getOrders(
+  params?: OrderQueryParams
+): Promise<PromisedOrders> {
   let url = "https://apis.codante.io/api/orders-api/orders";
 
   const queryParams = new URLSearchParams();

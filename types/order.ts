@@ -8,7 +8,10 @@ export type Order = {
 
   created_at: string;
   updated_at: string;
+};
 
+export type PromisedOrders = {
+  data: Order[];
   meta: {
     current_page: number;
     last_page: number;
