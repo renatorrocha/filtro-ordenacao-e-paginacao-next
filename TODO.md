@@ -24,7 +24,7 @@
   - Trocar o ícone para corresponder a ordenação
   - Deve ser refletido na URL
 
-- [ ] Paginação
+- [X] Paginação
   - ative e desative os botoes quando não á mais paginas
   - Deve ser refletido na URL
 

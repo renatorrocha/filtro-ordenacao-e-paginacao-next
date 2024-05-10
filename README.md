@@ -1,94 +1,82 @@
-# Busca, filtro, ordenação e paginação com Next.js
 
-Quando um dev front-end pensa em _busca_, _filtro_, _ordenação_ e _paginação_, provavelmente pensa em usar métodos como `Array.filter()` ou `Array.sort()` diretamente no front. Mas e se tivermos 100, 500, 1000 itens paginados de 10 em 10? Gerenciar isso pelo front é uma tarefa hercúlea - e pior, não muito eficiente.
+# Search, Filter, Sorting, and Pagination with Next.js
 
-Neste Mini Projeto, vamos implementar uma API que retorna uma listagem de pedidos. Por mais simples que pareça, essa é uma API poderosa: ela nos permite passar, como _query parameters_, busca textual, filtro, ordenação e paginação. E o melhor de tudo: **todas essas informações ficarão na URL** para fácil compartilhamento!
+In this Mini Project, I implemented an API that returns a listing of orders. As simple as it might seem, this is a powerful API: it allows us to pass, as query parameters, textual search, filters, sorting, and pagination. Best of all: **all this information stays in the URL** for easy sharing!
 
-Tudo isso no front usando Next.js e Server Components!
+All this on the front-end using Next.js and Server Components!
 
-## 🤓 Antes de começar
+## ScreenShot
 
-O design e UI do front já estão implementados! O objetivo aqui é conseguir conectar a API e fazer as funcionalidades de busca, filtro, ordenação e paginação funcionarem.
+![App Screenshot](public/screenshot.png)
 
-Para isso, basta fazer um fork, clonar o código para a sua máquina, instalar as dependências e rodar `pnpm run dev` ou `npm run dev`!
+## Technologies
+  - Next14
+  - Tailwind
+  - shadcn/ui
+  - Typescript
 
-#### A API
 
-A API que será utilizada foi desenvolvida por nós, do Codante. O endpoint principal (de listagem de pedidos) está em `https://apis.codante.io/api/orders-api/orders`. A API é capaz de filtrar, ordenar, paginar e fazer uma busca textual.
+## The API
 
-A documentação da API está em <a target="_blank" href="https://apis-docs.codante.io/orders-api">https://apis-docs.codante.io/orders-api</a>. Será necessário consultá-la para fazer este Mini Projeto.
+The API used was developed by the Codante team. Check they website
 
-> [!NOTE]    
-> Nenhum dos dados da API são reais e a base de dados é redefinida a cada hora.
+The API documentation is available at <a target="_blank" href="https://apis-docs.codante.io/orders-api">https://apis-docs.codante.io/orders-api</a>.
 
-## 🔨 Requisitos
+## Run Locally
+Clone the project
 
-**Conectar dados da API à tabela**
+```bash
+  git clone https://github.com/renatorrocha/filtro-ordenacao-e-paginacao-next
+```
 
-- Popule a tabela com os dados que vêm da API.
-- Você deverá usar os campos
-  - Nome do Cliente
-  - Email do Cliente
-  - Status
-  - Data do Pedido
-  - Valor do Pedido
+Go to the project directory
 
-> [!TIP]  
-> O valor do pedido está em centavos. Faça as conversões e transforme para o formato brasileiro de número.  
+```bash
+  cd filtro-ordenacao-e-paginacao-next
+```
 
-**Busca Textual**
+Install dependencies
 
-- Faça uma busca textual pelo nome do cliente.
-- A busca deverá ser totalmente server-side (ou seja, pela API e não pelo front-end).
-- A busca deverá ser refletida na URL. Quando não há uma busca, a URL não deverá mais possuir a query de busca.
+```bash
+  pnpm install
+```
 
-**Filtro de Status**
+Run the project
 
-- Faça um filtro de status (pending, completed) usando o botão de filtro.
-- O filtro deverá ser totalmente server-side.
-- O filtro deverá ser refletido na URL. Quando não há filtros ativos, a URL não deverá mais possuir a query de filtro.
+```bash
+  pnpm run dev
+```
 
-**Ordenação de Campos**
+## Features
 
-- Crie ordenação para, pelo menos, os campos de _data do pedido_ e _valor_.
-- A ordenação deverá ser ativada com um clique no nome da coluna respectiva (por exemplo, `valor`).
-- Troque o ícone ao lado do nome da coluna para que reflita corretamente o tipo da ordenação.
-- A ordenação deverá ser refletida na URL. Quando não há nenhuma ordenação, a URL não deverá mais possuir a query de ordenação.
+- [X] Connect API data
+  - Populate the table with the data
+  - Utilize fields such as:
+    - Customer Name
+    - Customer Email
+    - Status
+    - Order Date
+    - Order Value
 
-**Paginação**
+- [X] Textual Search
+  - by Customer Name
+  - Must be server-side (via API)
+  - Must be reflected in the URL
 
-- Implemente a paginação conforme os dados recebidos da API - a API já traz os links de páginas prontos para serem implementados.
-- Ative e desative os botões de próximo e anterior quando estiver na primeira e na última página.
-- A paginação também deverá ser refletida na URL.
+- [X] Status Filter
+  - Through the filter button (pending, completed)
+  - Server-side
+  - Must be reflected in the URL
 
-**Server e Client Components**
+- [X] Field Sorting
+  - Sorting for Order Date and Order Value
+  - Should be triggered with a click on the column name
+  - Change the icon to match the sorting
+  - Must be reflected in the URL
 
-- Decida quais componentes deverão ser servidor e quais deverão ser de cliente.
+- [X] Pagination
+  - Enable and disable buttons when there are no more pages
+  - Must be reflected in the URL
 
-## 🔨 Desafio extra para quem quer ir além
-
-- Utilize o hook `useDebounce` para atrasar a execução da função de busca textual e evitar muitos requests.
-
-## 🎨 Design Sugerido
-
-Neste mini projeto não será preciso implementar nenhum design - já fizemos isso por você.
-
-## 👉🏽 Sobre este mini-projeto
-
-### O que você irá praticar:
-
-#### Next.js
-
-- Router
-- Search Params
-- Estado na URL
-- Server Components no Next.js
-- 'use client' 
-- Paginação e Ordenação. 
-
-### Pré-requisitos
-
-- React
-- Next.js básico
-- Entender as diferenças entre server e client components é recomendável
-
+### Challenge
+  - [X] Use the UseDebounce hook to delay the execution of textual search
