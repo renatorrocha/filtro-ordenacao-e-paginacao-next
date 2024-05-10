@@ -10,53 +10,36 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { getOrders } from "@/server/actions";
-import { Order } from "@/types/order";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Pagination() {
-  const [page, setPage] = useState(1);
   const [totalOrders, setTotalOrders] = useState(1);
-  const [orders, setOrders] = useState<Order[]>([]);
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
   const totalPages = Math.ceil(totalOrders / 10);
 
+  const pageParam = searchParams.get("page");
+  const page = pageParam ? parseInt(pageParam) : 1;
+
   useEffect(() => {
     async function HandleGetOrders() {
       try {
         const fetchedOrders = await getOrders();
-        setOrders(fetchedOrders);
         setTotalOrders(fetchedOrders.meta.total);
       } catch (error) {
         console.error(error);
       }
     }
+
     HandleGetOrders();
   }, []);
 
-  function nextPage() {
-    setPage(page + 1);
+  function handlePageChange(newPage: number) {
     const params = new URLSearchParams(searchParams);
 
-    params.set("page", page.toString());
-    replace(`?${params.toString()}`);
-  }
-
-  function previousPage() {
-    setPage(page - 1);
-    const params = new URLSearchParams(searchParams);
-
-    params.set("page", page.toString());
-    replace(`?${params.toString()}`);
-  }
-
-  function changePage(page: number) {
-    setPage(page);
-    const params = new URLSearchParams(searchParams);
-
-    params.set("page", page.toString());
+    params.set("page", newPage.toString());
     replace(`?${params.toString()}`);
   }
 
@@ -64,33 +47,62 @@ export default function Pagination() {
     <PaginationComponent>
       <PaginationContent>
         <PaginationItem className={page == 1 ? "hidden" : "inline"}>
-          <PaginationPrevious onClick={previousPage} />
+          <PaginationPrevious onClick={() => handlePageChange(page - 1)} />
         </PaginationItem>
 
-        {Array.from({ length: Math.min(3, totalPages) }).map((_, index) => (
-          <PaginationItem key={index} className="hidden md:inline-flex">
-            <PaginationLink onClick={() => changePage(index + 1)}>
-              {index + 1}
+        {page > 2 && (
+          <>
+            <PaginationItem>
+              <PaginationLink onClick={() => handlePageChange(1)}>
+                1
+              </PaginationLink>
+            </PaginationItem>
+            {page > 3 && (
+              <PaginationItem className="hidden md:inline-flex">
+                <PaginationEllipsis />
+              </PaginationItem>
+            )}
+          </>
+        )}
+
+        {page > 1 && (
+          <PaginationItem>
+            <PaginationLink onClick={() => handlePageChange(page - 1)}>
+              {page - 1}
             </PaginationLink>
           </PaginationItem>
-        ))}
+        )}
 
-        <PaginationItem className="hidden md:inline-flex">
-          <PaginationEllipsis />
+        <PaginationItem>
+          <PaginationLink isActive>{page}</PaginationLink>
         </PaginationItem>
 
-        {/* <PaginationItem className="hidden md:inline-flex">
-          <PaginationLink>8</PaginationLink>
-        </PaginationItem>
-        <PaginationItem className="hidden md:inline-flex">
-          <PaginationLink>9</PaginationLink>
-        </PaginationItem>
-        <PaginationItem className="hidden md:inline-flex">
-          <PaginationLink>{totalPages}</PaginationLink>
-        </PaginationItem> */}
+        {page < totalPages && (
+          <PaginationItem>
+            <PaginationLink onClick={() => handlePageChange(page + 1)}>
+              {page + 1}
+            </PaginationLink>
+          </PaginationItem>
+        )}
+
+        {page < totalPages - 1 && (
+          <>
+            {page < totalPages - 2 && (
+              <PaginationItem className="hidden md:inline-flex">
+                <PaginationEllipsis />
+              </PaginationItem>
+            )}
+
+            <PaginationItem>
+              <PaginationLink onClick={() => handlePageChange(totalPages)}>
+                {totalPages}
+              </PaginationLink>
+            </PaginationItem>
+          </>
+        )}
 
         <PaginationItem className={page == totalPages ? "hidden" : "inline"}>
-          <PaginationNext onClick={nextPage} />
+          <PaginationNext onClick={() => handlePageChange(page + 1)} />
         </PaginationItem>
       </PaginationContent>
     </PaginationComponent>

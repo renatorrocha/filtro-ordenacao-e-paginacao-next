@@ -87,76 +87,84 @@ export default function OrdersTable() {
   }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow className="w-full">
-          <TableHead
-            className="table-cell cursor-pointer justify-end items-center gap-1"
-            onClick={() => handleSortByHeaderTitle("customer_name")}
-          >
-            <div className="flex items-center gap-1">
-              Nome
-              {renderSortIcon("customer_name")}
-            </div>
-          </TableHead>
+    <>
+      {orders.length > 0 ? (
+        <Table>
+          <TableHeader>
+            <TableRow className="w-full">
+              <TableHead
+                className="table-cell cursor-pointer justify-end items-center gap-1"
+                onClick={() => handleSortByHeaderTitle("customer_name")}
+              >
+                <div className="flex items-center gap-1">
+                  Nome
+                  {renderSortIcon("customer_name")}
+                </div>
+              </TableHead>
 
-          <TableHead
-            className="table-cell cursor-pointer justify-end items-center gap-1"
-            onClick={() => handleSortByHeaderTitle("status")}
-          >
-            <div className="flex items-center gap-1">
-              Status
-              {renderSortIcon("status")}
-            </div>
-          </TableHead>
+              <TableHead
+                className="table-cell cursor-pointer justify-end items-center gap-1"
+                onClick={() => handleSortByHeaderTitle("status")}
+              >
+                <div className="flex items-center gap-1">
+                  Status
+                  {renderSortIcon("status")}
+                </div>
+              </TableHead>
 
-          <TableHead
-            className="table-cell cursor-pointer justify-end items-center gap-1"
-            onClick={() => handleSortByHeaderTitle("order_date")}
-          >
-            <div className="flex items-center gap-1">
-              Data
-              {renderSortIcon("order_date")}
-            </div>
-          </TableHead>
+              <TableHead
+                className="table-cell cursor-pointer justify-end items-center gap-1"
+                onClick={() => handleSortByHeaderTitle("order_date")}
+              >
+                <div className="flex items-center gap-1">
+                  Data
+                  {renderSortIcon("order_date")}
+                </div>
+              </TableHead>
 
-          <TableHead
-            className="text-right cursor-pointer flex justify-end items-center gap-1"
-            onClick={() => handleSortByHeaderTitle("amount_in_cents")}
-          >
-            <div className="flex items-center gap-1">
-              Valor
-              {renderSortIcon("amount_in_cents")}
-            </div>
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {orders?.map((order) => (
-          <TableRow key={order.id}>
-            <TableCell>
-              <div className="font-medium">{order.customer_name}</div>
-              <div className="hidden md:inline text-sm text-muted-foreground">
-                {order.customer_email}
-              </div>
-            </TableCell>
+              <TableHead
+                className="text-right cursor-pointer flex justify-end items-center gap-1"
+                onClick={() => handleSortByHeaderTitle("amount_in_cents")}
+              >
+                <div className="flex items-center gap-1">
+                  Valor
+                  {renderSortIcon("amount_in_cents")}
+                </div>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {orders?.map((order) => (
+              <TableRow key={order.id}>
+                <TableCell>
+                  <div className="font-medium">{order.customer_name}</div>
+                  <div className="hidden md:inline text-sm text-muted-foreground">
+                    {order.customer_email}
+                  </div>
+                </TableCell>
 
-            <TableCell>
-              <Badge className={`text-xs`} variant="outline">
-                {OrderStatus[order.status]}
-              </Badge>
-            </TableCell>
+                <TableCell>
+                  <Badge className={`text-xs`} variant="outline">
+                    {OrderStatus[order.status]}
+                  </Badge>
+                </TableCell>
 
-            <TableCell className="hidden md:table-cell">
-              {order.order_date}
-            </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {order.order_date}
+                </TableCell>
 
-            <TableCell className="text-right">
-              {formatCurrencyBRL(order.amount_in_cents)}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+                <TableCell className="text-right">
+                  {formatCurrencyBRL(order.amount_in_cents)}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      ) : (
+        <div className="text-center py-4">
+          <p className="font-semibold">Nao foi encontrado nenhum resultado.</p>
+        </div>
+      )}
+    </>
   );
 }
